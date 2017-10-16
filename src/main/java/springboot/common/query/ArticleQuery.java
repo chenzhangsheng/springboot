@@ -1,7 +1,7 @@
 package springboot.common.query;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-import springboot.mongo.bean.BaseDO;
+import springboot.common.BaseDO;
 
 /**
  * Created by zhangshengchen on 2017/8/23.

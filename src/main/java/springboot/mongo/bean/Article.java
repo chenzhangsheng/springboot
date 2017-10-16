@@ -1,6 +1,7 @@
 package springboot.mongo.bean;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import springboot.common.BaseDO;
 
 /**
  * Created by zhangshengchen on 2017/8/22.

@@ -1,4 +1,4 @@
-package springboot.mongo.bean;
+package springboot.common;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
