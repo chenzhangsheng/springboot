@@ -1,6 +1,4 @@
 package springboot.dao;
-
-import org.apache.ibatis.annotations.Param;
 import springboot.common.MyMapper;
 import springboot.domain.City;
 
