@@ -18,6 +18,8 @@ public class XinxirenUserQuery {
     private int authorize;
     private String remarks;
     private Long rid;//角色id
+    private int pageNo;
+    private int rowCount;
     public Long getRid() {return rid;}
     public void setRid(Long rid) {this.rid = rid;}
     public Long getId() {return id;}
@@ -60,5 +62,9 @@ public class XinxirenUserQuery {
     }
     public String getRoleName() {return roleName;}
     public void setRoleName(String roleName) {this.roleName = roleName;}
+    public int getPageNo() {return pageNo;}
+    public void setPageNo(int pageNo) {this.pageNo = pageNo;}
+    public int getRowCount() {return rowCount;}
+    public void setRowCount(int rowCount) {this.rowCount = rowCount;}
 
 }

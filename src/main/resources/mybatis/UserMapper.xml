@@ -2,36 +2,66 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="springboot.dao.UserDo">
 	<sql id="Base_Column_List">
-		id, province_id, city_name, description
+		id,account,password,phone_number,user,authorize,create_time,update_time,is_deleted,remarks
 	</sql>
+
 	<sql id="getList-Where">
-		WHERE xinxiren_user.is_deleted = 0,
-		<if test="@Ognl@isNotEmpty(id)">
-		and xinxiren_user.id = #{id},
+		WHERE xinxiren_user.is_deleted = 0
+		<if test="id !=null and id !=''">
+			and xinxiren_user.id = #{id}
 		</if>
-		<if test="@Ognl@isNotEmpty(account)">
-		and xinxiren_user.account = #{account},
+		<if test="account !=null and account !=''">
+			and xinxiren_user.account = #{account}
 		</if>
-		<if test="@Ognl@isNotEmpty(phoneNumber)">
-		and xinxiren_user.phone_number = #{phoneNumber},
+		<if test="phoneNumber !=null and phoneNumber !=''">
+			and xinxiren_user.phone_number = #{phoneNumber}
 		</if>
-		<if test="@Ognl@isNotEmpty(user)">
-		and xinxiren_user.user = #{user},
+
+		<if test="userName !=null and userName !=''">
+			and xinxiren_user.user = #{userName}
 		</if>
-		<if test="@Ognl@isNotEmpty(authorize)">
-		and xinxiren_user.authorize = #{authorize},
+
+		<if test="authorize !=null and authorize !=''">
+			and xinxiren_user.authorize = #{authorize}
 		</if>
-		<if test="@Ognl@isNotEmpty(roleName)">
+		<if test="roleName !=null and roleName !=''">
 			and role.name = #{roleName}
 		</if>
 	</sql>
-	<select id="GetUserList" resultType="springboot.domain.bean.XinxirenUserBean" parameterType="springboot.common.query.XinxirenUserQuery">
+
+
+	<resultMap id="UserRoleMap" type="springboot.domain.bean.XinxirenUserBean">
+		<id column="id" property="id"/>
+		<result column="account" property="account" />
+		<result column="password" property="password" />
+		<result column="phone_number" property="phoneNumber" />
+		<result column="user" property="userName" />
+		<result column="authorize" property="authorize" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="remarks" property="remarks" />
+		<association property="role" javaType="springboot.domain.Role">
+			<id column="id" property="id"/>
+			<result column="name" property="name" />
+			<result column="remarks" property="remarks" />
+			<result column="usable" property="usable" />
+		</association>
+	</resultMap>
+	<select id="GetUserList" resultMap="UserRoleMap" parameterType="springboot.common.query.XinxirenUserQuery">
 		SELECT
 		xinxiren_user.*,
 		role.*
 		FROM
 		xinxiren_user LEFT JOIN user_role on xinxiren_user.id = user_role.uid JOIN role on user_role.rid = role.id
 		<include refid="getList-Where"></include>
-</select>
+	</select>
+
+	<insert id="AddUser" keyProperty="id" useGeneratedKeys="true" parameterType="springboot.common.query.XinxirenUserQuery">
+		insert into xinxiren_user
+		(account,password,phone_number,user,authorize,create_time,update_time,is_deleted,remarks)
+		values
+		(#{account},#{password},#{phoneNumber},#{userName},#{authorize},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0,#{remarks})
+	</insert>
+
 
 </mapper>

@@ -40,6 +40,9 @@ public class BaseAction {
             PlatformRequestRuntimeException exception = (PlatformRequestRuntimeException)ex;
             errCode = exception.getErr();
             mString =  exception.getMessage();
+        }else{
+            errCode = 500;
+            mString =  ex.getMessage();
         }
 
         return new ExceptionErrorMessage(errCode, httpStatus, mString);

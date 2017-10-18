@@ -1,5 +1,6 @@
 package springboot.domain.bean;
 
+import springboot.domain.Role;
 import springboot.domain.XinxirenUser;
 
 /**
@@ -7,13 +8,13 @@ import springboot.domain.XinxirenUser;
  */
 public class XinxirenUserBean extends XinxirenUser{
 
-    private String roleName;
+    private Role role;
 
-    public String getRoleName() {
-        return roleName;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

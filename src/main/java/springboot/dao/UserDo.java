@@ -17,4 +17,10 @@ public interface UserDo extends MyMapper<XinxirenUser> {
      * @param xinxirenUserQuery
      */
     List<XinxirenUserBean> GetUserList(XinxirenUserQuery xinxirenUserQuery);
+    /**
+     * 添加账户信息
+     * @param xinxirenUserQuery
+     */
+    void AddUser(XinxirenUserQuery xinxirenUserQuery);
+
 }

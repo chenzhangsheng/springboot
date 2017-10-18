@@ -18,7 +18,7 @@ public interface UserService {
      * 根据条件查询账户信息
      * @param xinxirenUserQuery
      */
-    List<XinxirenUserBean> GetUserList(XinxirenUserQuery xinxirenUserQuery);
+    Object GetUserList(XinxirenUserQuery xinxirenUserQuery);
     /**
      * 添加用户信息
      * @param xinxirenUserQuery

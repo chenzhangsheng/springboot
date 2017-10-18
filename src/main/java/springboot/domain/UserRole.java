@@ -11,6 +11,7 @@ import javax.persistence.Table;
 public class UserRole extends BaseDO {
     private Long uid;
     private Long rid;
+    private String note;
     public Long getUid() {
         return uid;
     }
@@ -23,6 +24,7 @@ public class UserRole extends BaseDO {
     public void setRid(Long rid) {
         this.rid = rid;
     }
-
+    public String getNote() {return note;}
+    public void setNote(String note) {this.note = note;}
 
 }
