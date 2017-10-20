@@ -14,6 +14,9 @@ public class Role extends BaseDO implements Serializable {
     private String remarks;
     private Long parentId;
     private int usable;
+    private String permission;
+    public String getPermission() {return permission;}
+    public void setPermission(String permission) {this.permission = permission;}
     public String getName() {
         return name;
     }

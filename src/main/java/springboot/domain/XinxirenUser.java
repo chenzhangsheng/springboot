@@ -12,6 +12,9 @@ public class XinxirenUser extends BaseDO {
     private String userName;
     private int authorize;
     private String remarks;
+    private Long rid;
+    public Long getRid() {return rid;}
+    public void setRid(Long rid) {this.rid = rid;}
     public String getAccount() {
         return account;
     }

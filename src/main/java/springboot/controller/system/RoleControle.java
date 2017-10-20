@@ -17,6 +17,7 @@ import springboot.common.query.XinxirenUserQuery;
 import springboot.common.utils.HttpRequestUtil;
 import springboot.common.utils.StringUtils;
 import springboot.domain.Permission;
+import springboot.domain.Role;
 import springboot.service.RoleManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 @Controller
 public class RoleControle extends BaseAction{
+
     @Autowired
     private RoleManager roleManager;
 
@@ -48,15 +50,12 @@ public class RoleControle extends BaseAction{
         }
     }
 
-    @RequestMapping(value = ActionURLContstants.PRIVATE + "/" + ActionURLContstants.VERSION_V1+"/getPermission", method = { RequestMethod.POST })
+    @RequestMapping(value = ActionURLContstants.PRIVATE + "/" + ActionURLContstants.VERSION_V1+"/GetRoleList", method = { RequestMethod.POST ,RequestMethod.GET})
     @ResponseBody
     public Object GetPermission(HttpServletRequest request, HttpServletResponse response){
         try{
             RoleQuery roleQuery = HttpRequestUtil.getRequestQuerryBean(request,RoleQuery.class);
-            if(roleQuery.getId() == null){
-                throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.API3_PARAMETER_ERROR), ErrConstatns.API3_PARAMETER_ERROR, HttpStatus.OK);
-            }
-            List<Permission> list = roleManager.GetPermissionList(roleQuery.getId());
+            List<Role> list = roleManager.GetRoleList(roleQuery);
             return new ResultBean(list, ResultBean.OK, "success");
         }catch (Exception e) {
             log.error("addUser: "+e.getMessage() + "_" + ExceptionUtils.getStackTrace(e));
@@ -65,15 +64,15 @@ public class RoleControle extends BaseAction{
         }
     }
 
-    @RequestMapping(value = ActionURLContstants.PRIVATE + "/" + ActionURLContstants.VERSION_V1+"/updatePermission", method = { RequestMethod.POST })
+    @RequestMapping(value = ActionURLContstants.PRIVATE + "/" + ActionURLContstants.VERSION_V1+"/updateRole", method = { RequestMethod.POST })
     @ResponseBody
-    public Object updatePermission(HttpServletRequest request, HttpServletResponse response){
+    public Object updateRole(HttpServletRequest request, HttpServletResponse response){
         try{
             RoleQuery roleQuery = HttpRequestUtil.getRequestQuerryBean(request,RoleQuery.class);
-            if(roleQuery.getId() == null ||roleQuery.getPermissionList().size()== 0){
+            if(roleQuery.getId() == null ){
                 throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.API3_PARAMETER_ERROR), ErrConstatns.API3_PARAMETER_ERROR, HttpStatus.OK);
             }
-            roleManager.updatePermission(roleQuery);
+            roleManager.updateRole(roleQuery);
             return new ResultBean("", ResultBean.OK, "success");
         }catch (Exception e) {
             log.error("addUser: "+e.getMessage() + "_" + ExceptionUtils.getStackTrace(e));
@@ -81,7 +80,20 @@ public class RoleControle extends BaseAction{
             return new ResultBean(null, message.getErrCode(),message.getErrMsg());
         }
     }
-
-
-
+    @RequestMapping(value = ActionURLContstants.PRIVATE + "/" + ActionURLContstants.VERSION_V1+"/deleteRole", method = { RequestMethod.POST })
+    @ResponseBody
+    public Object deleteRole(HttpServletRequest request, HttpServletResponse response){
+        try{
+            RoleQuery roleQuery = HttpRequestUtil.getRequestQuerryBean(request,RoleQuery.class);
+            if(roleQuery.getId() == null ){
+                throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.API3_PARAMETER_ERROR), ErrConstatns.API3_PARAMETER_ERROR, HttpStatus.OK);
+            }
+            roleManager.deleteRole(roleQuery.getId());
+            return new ResultBean("", ResultBean.OK, "success");
+        }catch (Exception e) {
+            log.error("addUser: "+e.getMessage() + "_" + ExceptionUtils.getStackTrace(e));
+            BaseAction.ExceptionErrorMessage message = getExceptionErrorMessage(e);
+            return new ResultBean(null, message.getErrCode(),message.getErrMsg());
+        }
+    }
 }

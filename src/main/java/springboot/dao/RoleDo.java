@@ -39,20 +39,15 @@ public interface RoleDo extends MyMapper<Role> {
     void updateRole(RoleQuery roleQuery);
 
     /**
-     * 根据条件查询角色所在资源组信息
-     * @param roleId
+     * 根据角色所在资源组信息
+     * @param role
      */
-    List<Permission> GetPermissionList(@Param("roleId") Long roleId);
+    List<Permission> GetPermissionList(Role role);
 
     /**
-     * 删除角色资源组信息
+     * 根据id查询角色
      * @param roleId
      */
-    void deletePermissionList(@Param("roleId") Long roleId);
+    Role GetRole(@Param("roleId") Long roleId);
 
-    /**
-     * 添加角色资源组信息
-     * @param roleQuery
-     */
-    void addPermissionList(RoleQuery roleQuery);
 }

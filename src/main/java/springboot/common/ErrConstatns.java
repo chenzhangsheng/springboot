@@ -25,7 +25,7 @@ public class ErrConstatns {
 	public static final Integer API3_AUTH_FAIL=388888;
 	public static final Integer API3_OTHER_ERROR=388887;
 	public static final Integer API3_AUTH_EXPIRATION_TIME_ERROR=388886;
-	public static final Integer API3_NICKNAME_EXIST=399995;
+	public static final Integer API3_ACCOUNT_EXIST=399995;
 	public static final Integer API3_CCLIVESTATUS_ERROR=113005;
 
 
@@ -46,7 +46,7 @@ public class ErrConstatns {
 		errCodeMap.put(API3_AUTH_FAIL, "auth fail");
 		errCodeMap.put(API3_OTHER_ERROR, "other error");
 		errCodeMap.put(API3_AUTH_EXPIRATION_TIME_ERROR, "auth expiration time error");
-		errCodeMap.put(API3_NICKNAME_EXIST, "nickname already exist");
+		errCodeMap.put(API3_ACCOUNT_EXIST, "account already exist");
 		errCodeMap.put(API3_CCLIVESTATUS_ERROR, "update live status error");
 	}
 	

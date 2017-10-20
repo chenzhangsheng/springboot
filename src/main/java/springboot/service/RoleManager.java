@@ -2,12 +2,17 @@ package springboot.service;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import springboot.common.ErrConstatns;
+import springboot.common.exception.PlatformRequestRuntimeException;
 import springboot.common.query.RoleQuery;
+import springboot.common.query.XinxirenUserQuery;
 import springboot.dao.RoleDo;
+import springboot.dao.UserDo;
 import springboot.domain.Permission;
 import springboot.domain.Role;
+import springboot.domain.bean.XinxirenUserBean;
 
 import java.util.List;
 
@@ -19,8 +24,11 @@ public class RoleManager {
 
     @Autowired
     private RoleDo roleDo;
+    @Autowired
+    private UserDo userDo;
 
-    public Object GetRoleList(RoleQuery roleQuery) {
+
+    public List<Role> GetRoleList(RoleQuery roleQuery) {
         List<Role> list = roleDo.GetRoleList(roleQuery);
         return list;
     }
@@ -30,6 +38,12 @@ public class RoleManager {
     }
 
     public void deleteRole(@Param("roleId") Long roleId) {
+        XinxirenUserQuery xinxirenUserQuery = new XinxirenUserQuery();
+        xinxirenUserQuery.setRid(roleId);
+        List<XinxirenUserBean> list = userDo.GetUserList(xinxirenUserQuery);
+        if(list.size()>0){
+            throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.API3_ACCOUNT_EXIST), ErrConstatns.API3_ACCOUNT_EXIST, HttpStatus.OK);
+        }
         roleDo.deleteRole(roleId);
     }
 
@@ -37,13 +51,9 @@ public class RoleManager {
         roleDo.updateRole(roleQuery);
     }
 
-    @Transactional
-    public void updatePermission(RoleQuery roleQuery) {
-        //先删除再添加
-        roleDo.deletePermissionList(roleQuery.getId());
-        roleDo.addPermissionList(roleQuery);
+    public List<Permission> GetPermissionList(Long rid){
+        Role role = roleDo.GetRole(rid);
+        return roleDo.GetPermissionList(role);
     }
-    public List<Permission> GetPermissionList(@Param("roleId") Long roleId) {
-        return roleDo.GetPermissionList(roleId);
-    }
+
 }

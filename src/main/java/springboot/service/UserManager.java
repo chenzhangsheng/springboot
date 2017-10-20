@@ -11,8 +11,6 @@ import springboot.common.ErrConstatns;
 import springboot.common.exception.PlatformRequestRuntimeException;
 import springboot.common.query.XinxirenUserQuery;
 import springboot.dao.UserDo;
-import springboot.dao.UserRoleDo;
-import springboot.domain.UserRole;
 import springboot.domain.bean.XinxirenUserBean;
 
 import java.util.List;
@@ -25,8 +23,6 @@ public class UserManager {
 
     @Autowired
     private UserDo userDo;
-    @Autowired
-    private UserRoleDo userRoleDo;
 
     public Object GetUserList(XinxirenUserQuery xinxirenUserQuery) {
         PageHelper.startPage(xinxirenUserQuery.getPageNo(),xinxirenUserQuery.getRowCount());
@@ -35,9 +31,6 @@ public class UserManager {
         return page;
     }
 
-
-
-    @Transactional
     public void addUser(XinxirenUserQuery xinxirenUserQuery) {
         XinxirenUserQuery query = new XinxirenUserQuery();
         query.setAccount(xinxirenUserQuery.getAccount());
@@ -46,10 +39,6 @@ public class UserManager {
             throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.E_ACCOUNT_ALREADY_EXIST), ErrConstatns.E_ACCOUNT_ALREADY_EXIST, HttpStatus.OK);
         }
         userDo.AddUser(xinxirenUserQuery);
-        UserRole userRole = new UserRole();
-        userRole.setUid(xinxirenUserQuery.getId());
-        userRole.setRid(xinxirenUserQuery.getRid());
-        userRoleDo.AddUseRole(userRole);
     }
 
 
@@ -60,19 +49,14 @@ public class UserManager {
 
     @Transactional
     public void updateUser(XinxirenUserQuery xinxirenUserQuery) {
-        userDo.updateUser(xinxirenUserQuery);
         if(xinxirenUserQuery.getRid() == null || xinxirenUserQuery.getId() == null){
             throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.API3_PARAMETER_ERROR), ErrConstatns.API3_PARAMETER_ERROR, HttpStatus.OK);
         }
-        UserRole userRole = new UserRole();
-        userRole.setRid(xinxirenUserQuery.getRid());
-        userRole.setUid(xinxirenUserQuery.getId());
-        userRoleDo.deleteUserRole(xinxirenUserQuery.getId());
-        userRoleDo.AddUseRole(userRole);
+        userDo.updateUser(xinxirenUserQuery);
     }
 
     public XinxirenUserBean GetUser(XinxirenUserQuery xinxirenUserQuery) {
-        XinxirenUserBean user  =userDo.SelectOne(xinxirenUserQuery);
+        XinxirenUserBean user  = userDo.SelectOne(xinxirenUserQuery);
         return user;
     }
 }

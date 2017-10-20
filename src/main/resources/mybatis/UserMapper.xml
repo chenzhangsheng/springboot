@@ -7,18 +7,20 @@
 
 	<sql id="getList-Where">
 		WHERE xinxiren_user.is_deleted = 0
-		<if test="id !=null and id !=''">and xinxiren_user.id = #{id}</if>
-		<if test="account !=null and account !=''">and xinxiren_user.account = #{account}</if>
-		<if test="phoneNumber !=null and phoneNumber !=''">and xinxiren_user.phone_number = #{phoneNumber}</if>
-		<if test="userName !=null and userName !=''">and xinxiren_user.user = #{userName}</if>
-		<if test="authorize !=null and authorize !=''">and xinxiren_user.authorize = #{authorize}</if>
-		<if test="rid !=null and rid !=''">and role.id = #{rid}</if>
+		<if test="id !=null and id !=''">and id = #{id}</if>
+		<if test="account !=null and account !=''">and account = #{account}</if>
+		<if test="phoneNumber !=null and phoneNumber !=''">and phone_number = #{phoneNumber}</if>
+		<if test="userName !=null and userName !=''">and user = #{userName}</if>
+		<if test="authorize !=null and authorize !=''">and authorize = #{authorize}</if>
+		<if test="rid !=null and rid !=''">and rid = #{rid}</if>
 	</sql>
 
 	<sql id="updateUser-Set">
+		<if test="password !=null and password !=''"> password = #{password},</if>
 		<if test="phoneNumber !=null and phoneNumber !=''"> phone_number = #{phoneNumber},</if>
 		<if test="userName !=null and userName !=''"> user = #{userName},</if>
 		<if test="authorize !=null and authorize !=''"> authorize = #{authorize},</if>
+		<if test="rid !=null and rid !=''"> rid = #{rid},</if>
 		update_time=CURRENT_TIMESTAMP
 	</sql>
 
@@ -41,26 +43,24 @@
 	</resultMap>
 	<select id="GetUserList" resultMap="UserRoleMap" parameterType="springboot.common.query.XinxirenUserQuery">
 		SELECT
-		xinxiren_user.*,
-		role.*
+		*
 		FROM
-		xinxiren_user LEFT JOIN user_role on xinxiren_user.id = user_role.uid JOIN role on user_role.rid = role.id
+		xinxiren_user LEFT JOIN role on xinxiren_user.rid = role.id
 		<include refid="getList-Where"></include>
 	</select>
 
 	<insert id="AddUser" keyProperty="id" useGeneratedKeys="true" parameterType="springboot.common.query.XinxirenUserQuery">
 		insert into xinxiren_user
-		(account,password,phone_number,user,authorize,create_time,update_time,is_deleted,remarks)
+		(account,password,phone_number,user,authorize,create_time,update_time,is_deleted,remarks,rid)
 		values
-		(#{account},#{password},#{phoneNumber},#{userName},#{authorize},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0,#{remarks})
+		(#{account},#{password},#{phoneNumber},#{userName},#{authorize},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0,#{remarks},#{rid})
 	</insert>
 
 	<select id="SelectOne" parameterType="springboot.common.query.XinxirenUserQuery" resultMap="UserRoleMap">
 		SELECT
-		xinxiren_user.*,
-		role.*
+		*
 		FROM
-		xinxiren_user LEFT JOIN user_role on xinxiren_user.id = user_role.uid JOIN role on user_role.rid = role.id
+		xinxiren_user LEFT JOIN role on xinxiren_user.rid = role.id
 		<include refid="getList-Where"></include>
 	</select>
 

@@ -13,8 +13,9 @@ public class RoleQuery extends BaseQuery {
     private String remarks;
     private Long parentId;
     private int usable;
-    @JsonProperty("permission_list")
-    private List<Permission> permissionList;
+    private String permission;
+    public String getPermission() {return permission;}
+    public void setPermission(String permission) {this.permission = permission;}
     public String getName() {
         return name;
     }
@@ -39,7 +40,5 @@ public class RoleQuery extends BaseQuery {
     public void setUsable(int usable) {
         this.usable = usable;
     }
-    public List<Permission> getPermissionList() {return permissionList;}
-    public void setPermissionList(List<Permission> permissionList) {this.permissionList = permissionList;}
 
 }

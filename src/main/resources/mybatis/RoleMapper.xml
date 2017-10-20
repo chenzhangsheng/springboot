@@ -16,6 +16,7 @@
 		<if test="name !=null and name !=''"> name = #{name},</if>
 		<if test="usable !=null and usable !=''"> usable = #{usable},</if>
 		<if test="parentId !=null and parentId !=''"> parentId = #{parentId},</if>
+		<if test="permission !=null and permission !=''"> permission = #{permission},</if>
 		update_time=CURRENT_TIMESTAMP
 	</sql>
 
@@ -29,9 +30,9 @@
 
 	<insert id="addRole" keyProperty="id" useGeneratedKeys="true" parameterType="springboot.common.query.RoleQuery">
 		insert into role
-		(name,parentId,usable,create_time,update_time,is_deleted,remarks)
+		(name,parentId,usable,create_time,update_time,is_deleted,remarks,permission)
 		values
-		(#{name},#{parentId},#{usable},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0,#{remarks})
+		(#{name},#{parentId},#{usable},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0,#{remarks},#{permission})
 	</insert>
 
 	<update id="deleteRole">
@@ -44,25 +45,21 @@
 		where is_deleted = 0
 		and id=#{id}
 	</update>
-	<select id="GetPermissionList" resultType="springboot.domain.Permission" >
 
+	<select id="GetPermissionList" resultType="springboot.domain.Permission" >
 		SELECT
-		permission.*
+		*
 		FROM
-		permission
-		WHERE id in (SELECT pid FROM role_permission WHERE role_permission.rid =#{roleId})
+		permission WHERE find_in_set(id,#{permission})
 		AND is_deleted = 0
 	</select>
 
-	<update id="deletePermissionList" >
-		UPDATE role_permission SET is_deleted=1,update_time=CURRENT_TIMESTAMP WHERE is_deleted=0 and rid=#{roleId}
-	</update>
-	<insert id="addPermissionList" keyProperty="id" useGeneratedKeys="true"  parameterType="springboot.common.query.RoleQuery">
-		INSERT INTO role_permission (rid,pid,update_time,create_time,is_deleted)
-		VALUES
-		<foreach collection ="permissionList" item="bean" index= "index" separator =",">
-			(#{id}, #{bean.id},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0)
-		</foreach >
-	</insert>
-
+	<select id="GetRole" resultType="springboot.domain.Role" >
+		SELECT
+		role.*
+		FROM
+		role
+		where is_deleted = 0
+		and id=#{roleId}
+	</select>
 </mapper>
