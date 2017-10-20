@@ -35,17 +35,15 @@ public class RedisClient {
     }
 
 /**
- * 设置缓存
+ * 更新缓存时间
  * @param key String
- * @param value Object对象
  * @param cacheSeconds 超时时间，0为不超时
  * @return
  */
-      public void setRedisObject(String key,Object value,int cacheSeconds){
+      public void setRedisObject(String key,int cacheSeconds){
           Jedis jedis = null;
           try {
                jedis = getResource();
-               jedis.set(getBytesKey(key),toBytes(value));
                  if (cacheSeconds!=0){
                      jedis.expire(key,cacheSeconds);
                  }
@@ -56,6 +54,30 @@ public class RedisClient {
               jedis.close();
           }
       }
+
+    /**
+     * 缓存
+     * @param key String
+     * @param value Object对象
+     * @param cacheSeconds 超时时间，0为不超时
+     * @return
+     */
+    public void setRedisObject(String key,Object value,int cacheSeconds){
+        Jedis jedis = null;
+        try {
+            jedis = getResource();
+            jedis.set(getBytesKey(key),toBytes(value));
+            if (cacheSeconds!=0){
+                jedis.expire(key,cacheSeconds);
+            }
+        } catch (Exception e) {
+            log.error("Jedis setObject error:" + e.getMessage() + "_" + ExceptionUtils.getStackTrace(e));
+            throw new InvalidRequestRuntimeException("Jedis setObject error", ResultBean.SYS_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            jedis.close();
+        }
+    }
+
 
 
    /**

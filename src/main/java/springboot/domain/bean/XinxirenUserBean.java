@@ -1,14 +1,29 @@
 package springboot.domain.bean;
 
+import springboot.common.AccessTokenBean;
+import springboot.domain.Permission;
 import springboot.domain.Role;
 import springboot.domain.XinxirenUser;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by zhangshengchen on 2017/10/17.
  */
-public class XinxirenUserBean extends XinxirenUser{
+public class XinxirenUserBean extends XinxirenUser implements Serializable {
 
     private Role role;
+    private List<Permission> permissionList;
+    private AccessTokenBean accessTokenBean;
+
+    public AccessTokenBean getAccessTokenBean() {return accessTokenBean;}
+
+    public void setAccessTokenBean(AccessTokenBean accessTokenBean) {this.accessTokenBean = accessTokenBean;}
+
+    public List<Permission> getPermissionList() {return permissionList;}
+
+    public void setPermissionList(List<Permission> permissionList) {this.permissionList = permissionList;}
 
     public Role getRole() {
         return role;

@@ -7,8 +7,7 @@ public class ErrConstatns {
 	 * Common
 	 */
 	public static final Integer E_ACCOUNT_ALREADY_EXIST=100001;
-
-
+	public static final Integer E_ACCOUNT_PASSWORD_ERROR=100002;
 
 
 	/*
@@ -41,6 +40,7 @@ public class ErrConstatns {
 		errCodeMap.put(API3_PARAMETER_LENGTH_ERROR, "parameter length error");
 		errCodeMap.put(API3_USER_STATUS_ERROR, "user status error");
 		errCodeMap.put(API3_OVER_LIMIT, "over limit");
+		errCodeMap.put(E_ACCOUNT_PASSWORD_ERROR, "account or password error");
 
 		errCodeMap.put(API3_SAVE_FAIL, "fail");
 		errCodeMap.put(API3_AUTH_FAIL, "auth fail");

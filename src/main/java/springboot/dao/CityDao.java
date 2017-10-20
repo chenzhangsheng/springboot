@@ -15,7 +15,7 @@ public interface CityDao extends MyMapper<City> {
     /**
      * 根据城市名称，查询城市信息
      *
-     * @param cityName 城市名
+     * @param map 城市名
      */
     List<City> findByName(Map<String, Object> map);
 }

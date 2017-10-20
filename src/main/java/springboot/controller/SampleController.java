@@ -11,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import springboot.domain.City;
 import springboot.mongo.service.ArticleService;
-import springboot.service.CityService;
+import springboot.service.CityManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileOutputStream;
@@ -26,7 +25,7 @@ import static java.lang.System.out;
 @Controller
 public class SampleController {
     @Autowired
-    private CityService cityService;
+    private CityManager cityManager;
 
     @Autowired
     private ArticleService articleService;
@@ -38,7 +37,7 @@ public class SampleController {
         map.put("pageNo",1);
         map.put("rowCount",2);
         out.println(articleService.get(1L));
-        return cityService.findCityByName(map);
+        return cityManager.findCityByName(map);
     }
     @RequestMapping("/web")
     public String freemarker(Map<String, Object> map,HttpServletRequest request) {

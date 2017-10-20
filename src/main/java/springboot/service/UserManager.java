@@ -1,37 +1,33 @@
-package springboot.service.impl;
+package springboot.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.common.ErrConstatns;
 import springboot.common.exception.PlatformRequestRuntimeException;
 import springboot.common.query.XinxirenUserQuery;
-import springboot.dao.CityDao;
 import springboot.dao.UserDo;
 import springboot.dao.UserRoleDo;
 import springboot.domain.UserRole;
-import springboot.domain.XinxirenUser;
 import springboot.domain.bean.XinxirenUserBean;
-import springboot.service.UserService;
 
 import java.util.List;
 
 /**
- * Created by ChenZhangsheng on 2017/10/17.
+ * Created by zhangshengchen on 2017/10/20.
  */
-@Service
-public class UserServiceImpl implements UserService{
+@Repository("userManager")
+public class UserManager {
 
     @Autowired
     private UserDo userDo;
     @Autowired
     private UserRoleDo userRoleDo;
 
-    @Override
     public Object GetUserList(XinxirenUserQuery xinxirenUserQuery) {
         PageHelper.startPage(xinxirenUserQuery.getPageNo(),xinxirenUserQuery.getRowCount());
         List<XinxirenUserBean> list = userDo.GetUserList(xinxirenUserQuery);
@@ -40,14 +36,14 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    @Override
+
     @Transactional
     public void addUser(XinxirenUserQuery xinxirenUserQuery) {
         XinxirenUserQuery query = new XinxirenUserQuery();
         query.setAccount(xinxirenUserQuery.getAccount());
-        List<XinxirenUserBean> list =userDo.GetUserList(query);
-        if(list.size()>0){
-            throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.E_ACCOUNT_ALREADY_EXIST), ErrConstatns.E_ACCOUNT_ALREADY_EXIST, HttpStatus.UNPROCESSABLE_ENTITY);
+        XinxirenUserBean user  =userDo.SelectOne(query);
+        if(user!=null){
+            throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.E_ACCOUNT_ALREADY_EXIST), ErrConstatns.E_ACCOUNT_ALREADY_EXIST, HttpStatus.OK);
         }
         userDo.AddUser(xinxirenUserQuery);
         UserRole userRole = new UserRole();
@@ -56,13 +52,27 @@ public class UserServiceImpl implements UserService{
         userRoleDo.AddUseRole(userRole);
     }
 
-    @Override
-    public int deleteUser(XinxirenUserQuery xinxirenUserQuery) {
-        return 0;
+
+    public void deleteUser(@Param("userId") Long userId) {
+        userDo.deleteUser(userId);
     }
 
-    @Override
-    public int updateUser(@Param("userId") Long userId) {
-        return 0;
+
+    @Transactional
+    public void updateUser(XinxirenUserQuery xinxirenUserQuery) {
+        userDo.updateUser(xinxirenUserQuery);
+        if(xinxirenUserQuery.getRid() == null || xinxirenUserQuery.getId() == null){
+            throw new PlatformRequestRuntimeException(ErrConstatns.getCodeMessage(ErrConstatns.API3_PARAMETER_ERROR), ErrConstatns.API3_PARAMETER_ERROR, HttpStatus.OK);
+        }
+        UserRole userRole = new UserRole();
+        userRole.setRid(xinxirenUserQuery.getRid());
+        userRole.setUid(xinxirenUserQuery.getId());
+        userRoleDo.deleteUserRole(xinxirenUserQuery.getId());
+        userRoleDo.AddUseRole(userRole);
+    }
+
+    public XinxirenUserBean GetUser(XinxirenUserQuery xinxirenUserQuery) {
+        XinxirenUserBean user  =userDo.SelectOne(xinxirenUserQuery);
+        return user;
     }
 }

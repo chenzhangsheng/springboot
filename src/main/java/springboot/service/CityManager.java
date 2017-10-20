@@ -1,24 +1,21 @@
-package springboot.service.impl;
+package springboot.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import springboot.dao.CityDao;
 import springboot.domain.City;
 import springboot.redis.RedisClient;
-import springboot.service.CityService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * 城市业务逻辑实现类
- *
- * Created by bysocket on 07/02/2017.
+ * Created by zhangshengchen on 2017/10/20.
  */
-@Service
-public class CityServiceImpl implements CityService {
+@Repository("cityManager")
+public class CityManager {
 
     @Autowired
     private CityDao cityDao;
@@ -33,5 +30,4 @@ public class CityServiceImpl implements CityService {
         PageInfo page = new PageInfo(list);
         return page;
     }
-
 }

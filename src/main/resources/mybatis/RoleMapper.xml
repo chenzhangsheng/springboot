@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="springboot.dao.RoleDo">
+	<sql id="Base_Column_List">
+		id,name,parentId,usable,create_time,update_time,is_deleted,remarks
+	</sql>
+
+	<sql id="getList-Where">
+		WHERE is_deleted = 0
+		<if test="id !=null and id !=''">and id = #{id}</if>
+		<if test="name !=null and name !=''">and name = #{name}</if>
+		<if test="usable !=null and usable !=''">and usable = #{usable}</if>
+		<if test="parentId !=null and parentId !=''">and parentId = #{parentId}</if>
+	</sql>
+	<sql id="updateRole-Set">
+		<if test="name !=null and name !=''"> name = #{name},</if>
+		<if test="usable !=null and usable !=''"> usable = #{usable},</if>
+		<if test="parentId !=null and parentId !=''"> parentId = #{parentId},</if>
+		update_time=CURRENT_TIMESTAMP
+	</sql>
+
+	<select id="GetRoleList" resultType="springboot.domain.Role" parameterType="springboot.common.query.RoleQuery">
+		SELECT
+		role.*
+		FROM
+		role
+		<include refid="getList-Where"></include>
+	</select>
+
+	<insert id="addRole" keyProperty="id" useGeneratedKeys="true" parameterType="springboot.common.query.RoleQuery">
+		insert into role
+		(name,parentId,usable,create_time,update_time,is_deleted,remarks)
+		values
+		(#{name},#{parentId},#{usable},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0,#{remarks})
+	</insert>
+
+	<update id="deleteRole">
+		UPDATE role SET is_deleted=1,update_time=CURRENT_TIMESTAMP WHERE is_deleted=0 and id=#{roleId}
+	</update>
+	<update id="updateRole" parameterType="springboot.common.query.RoleQuery">
+		update
+		role set
+		<include refid="updateRole-Set"></include>
+		where is_deleted = 0
+		and id=#{id}
+	</update>
+	<select id="GetPermissionList" resultType="springboot.domain.Permission" >
+
+		SELECT
+		permission.*
+		FROM
+		permission
+		WHERE id in (SELECT pid FROM role_permission WHERE role_permission.rid =#{roleId})
+		AND is_deleted = 0
+	</select>
+
+	<update id="deletePermissionList" >
+		UPDATE role_permission SET is_deleted=1,update_time=CURRENT_TIMESTAMP WHERE is_deleted=0 and rid=#{roleId}
+	</update>
+	<insert id="addPermissionList" keyProperty="id" useGeneratedKeys="true"  parameterType="springboot.common.query.RoleQuery">
+		INSERT INTO role_permission (rid,pid,update_time,create_time,is_deleted)
+		VALUES
+		<foreach collection ="permissionList" item="bean" index= "index" separator =",">
+			(#{id}, #{bean.id},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0)
+		</foreach >
+	</insert>
+
+</mapper>

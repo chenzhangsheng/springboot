@@ -1,19 +1,20 @@
-package springboot.domain;
+package springboot.common.query;
 
-import springboot.common.BaseDO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import springboot.domain.Permission;
 
-import javax.persistence.Table;
-import java.io.Serializable;
+import java.util.List;
 
 /**
- * Created by ChenZhangsheng on 2017/10/16.
+ * Created by zhangshengchen on 2017/10/19.
  */
-@Table(name ="role")
-public class Role extends BaseDO implements Serializable {
+public class RoleQuery extends BaseQuery {
     private String name;
     private String remarks;
     private Long parentId;
     private int usable;
+    @JsonProperty("permission_list")
+    private List<Permission> permissionList;
     public String getName() {
         return name;
     }
@@ -38,6 +39,7 @@ public class Role extends BaseDO implements Serializable {
     public void setUsable(int usable) {
         this.usable = usable;
     }
-
+    public List<Permission> getPermissionList() {return permissionList;}
+    public void setPermissionList(List<Permission> permissionList) {this.permissionList = permissionList;}
 
 }

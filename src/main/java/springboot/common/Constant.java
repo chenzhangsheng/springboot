@@ -16,6 +16,7 @@ public class Constant {
 	
 	public static final String ROOT_URL="http://nbuxinxiren.cn/";
 
+	public static final String PROJECT_NAME="NBUXINXIREN";
 	public static final int ONE_CLASSID = 0;
 	
 	public static final int  maxFileSize = 60000; //压缩图片限制，小于此值将不压缩  60K
